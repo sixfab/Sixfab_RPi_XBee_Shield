@@ -49,8 +49,15 @@ class XBee:
 		
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setwarnings(False)
+		ser.open()
 			
 		debug_print(self.board + " Class initialized!")
+	
+	def serialAvailable(self):
+		if (ser.isOpen() == False):
+			ser.open()
+		n_of_bytes = ser.inWaiting()
+		return n_of_bytes
 
 	def sendString(self, compose):
 		if (ser.isOpen() == False):
@@ -60,7 +67,14 @@ class XBee:
 		debug_print(compose)
 
 	def receiveString(self):
+		if (ser.isOpen() == False):
+			ser.open()
+		# delay for 9600 bps. If your xbee baudrate is 115200
+		# remove this delay from code
+		delay(100) 
 		response = ""
-		while(ser.inWaiting()):
-			response += ser.read(ser.inWaiting()).decode('utf-8')
-		return response
+		response += ser.read(ser.inWaiting()).decode('utf-8')
+		if(response != ""):
+			return response
+		else: 
+			pass
