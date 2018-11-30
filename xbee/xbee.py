@@ -12,6 +12,8 @@ import RPi.GPIO as GPIO
 
 # global variables
 TIMEOUT = 3 # seconds
+USER_BUTTON = 20 
+USER_LED = 21
 ser = serial.Serial()
 
 ###########################################
@@ -78,3 +80,15 @@ class XBee:
 			return response
 		else: 
 			pass
+			
+	def turnOnLED(self):
+		GPIO.setup(USER_LED, GPIO.OUT)
+		GPIO.output(USER_LED, 1)
+		
+	def turnOffLED(self):
+		GPIO.setup(USER_LED, GPIO.OUT)
+		GPIO.output(USER_LED, 0)
+	
+	def readUserButton(self):
+		GPIO.setup(USER_BUTTON, GPIO.IN)
+		return GPIO.input(USER_BUTTON)
